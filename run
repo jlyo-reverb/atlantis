@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+exec 2>&1
+set -x
+
+: "${SECRETS_DIR:="${HOME}/.secrets/atlantis"}"
+
+envdir env jq -nf data/repos.jq > data/repos.json
+
+exec  \
+us-east-1 \
+awsp lab \
+envdir env \
+envdir "$SECRETS_DIR" \
+atlantis server
